@@ -14,5 +14,6 @@ pip3 install numpy
 To run the simulation:
 
 ```bash
+## How to run
 make sim
 ```
