@@ -13,15 +13,15 @@ def float8arr_to_uint8_arr(nparr, endian='little'):
     if nparr.ndim != 1:
         nparr = nparr.reshape(-1)
     uint8_list = []
-    # Since float8 does not offer bitwise operation, we need to convert to int16 first
+    # Since float8 does not offer bitwise operation, we need to convert to int8 first
     nparr = nparr.view(torch.int8)
     for elem in nparr:
         if endian == 'little':
-            uint8_list.append(elem & 0xFF)
-            # uint8_list.append((elem >> 8) & 0xFF)
+            # Convert to uint8 by masking with 0xFF
+            uint8_list.append(elem.item() & 0xFF)
         elif endian == 'big':
-            uint8_list.append((elem >> 8) & 0xFF)
-            uint8_list.append(elem & 0xFF)
+            uint8_list.append((elem.item() >> 8) & 0xFF)
+            uint8_list.append(elem.item() & 0xFF)
         else:
             raise ValueError('float8arr_to_uint8_arr: endian must be either little or big')
     nparr = np.array(uint8_list, dtype=np.uint8)
